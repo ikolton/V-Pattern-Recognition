@@ -1,6 +1,9 @@
 # Use an official NVIDIA CUDA base image
 FROM nvidia/cuda:11.8.0-cudnn8-devel-ubuntu22.04
 
+ARG TENSOR_RT_INSTALLATION_FILE="./nv-tensorrt.deb"
+ARG SSH_ROOT_PASSWORD="root"
+
 # Set environment variables
 ENV DEBIAN_FRONTEND=noninteractive \
     PYTHONDONTWRITEBYTECODE=1 \
@@ -37,11 +40,9 @@ WORKDIR torch2trt
 RUN python3 setup.py install
 WORKDIR /Seal
 
-# Install TensorRT
-RUN sudo dpkg -i nv-tensorrt.deb
-
-# Copy requirements.txt into the container
-#COPY requirements.txt /Seal/
+COPY ${TENSOR_RT_INSTALLATION_FILE} ./nv-tensorrt.deb
+RUN dpkg -i ./nv-tensorrt.deb && \
+    rm ./nv-tensorrt.deb
 
 # Install NanoOwl
 RUN git clone https://github.com/NVIDIA-AI-IOT/nanoowl
@@ -51,3 +52,23 @@ RUN python3 setup.py develop --user
 RUN mkdir -p data && \
     python3 -m nanoowl.build_image_encoder_engine data/owl_image_encoder_patch32.engine
 WORKDIR /Seal
+
+# ================================ SSH Configuration ================================
+
+# Update and install SSH server
+RUN apt-get update && apt-get install -y openssh-server
+
+# Create SSH configuration directory if it doesn't exist
+RUN mkdir -p /var/run/sshd
+
+# Allow root login (not recommended for production; use a user with proper SSH keys instead)
+RUN echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
+
+# Set root password (replace 'rootpassword' with a secure password or configure SSH keys)
+RUN echo "root:${SSH_ROOT_PASSWORD}" | chpasswd
+
+# Expose the SSH port
+EXPOSE 22
+
+# Start the SSH service
+CMD ["/usr/sbin/sshd", "-D"]
