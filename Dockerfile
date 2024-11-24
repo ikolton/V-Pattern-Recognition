@@ -13,19 +13,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Set working directory
-WORKDIR /Seal
-COPY . /Seal
-
-# Install torch2trt
-RUN git clone https://github.com/NVIDIA-AI-IOT/torch2trt
-WORKDIR torch2trt
-RUN python setup.py install
-WORKDIR /Seal
-
-# Install TensorRT
-RUN sudo dpkg -i nv-tensorrt.deb
-
 # Update and install Python, pip, and other necessary dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3.11 \
@@ -35,15 +22,26 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
-
-# Upgrade pip to the latest version
 RUN pip3 install --no-cache-dir --upgrade pip
 
-# Copy requirements.txt into the container
-COPY requirements.txt /Seal/
+# Set working directory
+WORKDIR /Seal
+COPY . /Seal
 
 # Install Python dependencies
 RUN pip3 install --no-cache-dir -r requirements.txt
+
+# Install torch2trt
+RUN git clone https://github.com/NVIDIA-AI-IOT/torch2trt
+WORKDIR torch2trt
+RUN python3 setup.py install
+WORKDIR /Seal
+
+# Install TensorRT
+RUN sudo dpkg -i nv-tensorrt.deb
+
+# Copy requirements.txt into the container
+#COPY requirements.txt /Seal/
 
 # Install NanoOwl
 RUN git clone https://github.com/NVIDIA-AI-IOT/nanoowl
