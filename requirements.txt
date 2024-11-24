@@ -5,3 +5,4 @@ opencv-python==4.10.0.84
 Pillow==8.4.0
 tensorrt==10.6.0
 packaging
+transformers==4.46.2
