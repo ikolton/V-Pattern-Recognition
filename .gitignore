@@ -1,4 +1,3 @@
 venv
 .DS_Store
-TensorRT_install/*
-!TensorRT_install/.empty
+*.deb
