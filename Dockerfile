@@ -31,27 +31,10 @@ RUN pip3 install --no-cache-dir --upgrade pip
 WORKDIR /Seal
 COPY . /Seal
 
+COPY ${TENSOR_RT_INSTALLATION_FILE} ./nv-tensorrt.deb
+
 # Install Python dependencies
 RUN pip3 install --no-cache-dir -r requirements.txt
-
-# Install torch2trt
-RUN git clone https://github.com/NVIDIA-AI-IOT/torch2trt
-WORKDIR torch2trt
-RUN python3 setup.py install
-WORKDIR /Seal
-
-COPY ${TENSOR_RT_INSTALLATION_FILE} ./nv-tensorrt.deb
-RUN dpkg -i ./nv-tensorrt.deb && \
-    rm ./nv-tensorrt.deb
-
-# Install NanoOwl
-RUN git clone https://github.com/NVIDIA-AI-IOT/nanoowl
-WORKDIR nanoowl
-RUN python3 setup.py develop --user
-
-RUN mkdir -p data && \
-    python3 -m nanoowl.build_image_encoder_engine data/owl_image_encoder_patch32.engine
-WORKDIR /Seal
 
 # ================================ SSH Configuration ================================
 
