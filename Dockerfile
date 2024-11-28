@@ -12,9 +12,24 @@ ENV DEBIAN_FRONTEND=noninteractive \
 # Install necessary packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
-    tensorrt \
+    curl \
+    software-properties-common \
+    build-essential \
+    dkms \
+    libnvidia-ml-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+# Install Nvidia drivers
+RUN add-apt-repository ppa:graphics-drivers/ppa && apt-get update && apt-get install -y nvidia-driver-565
+
+# Install Nvidia Cuda toolkit container
+RUN curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
+  && curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
+    sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
+    tee /etc/apt/sources.list.d/nvidia-container-toolkit.list && \
+    apt-get update && apt-get install -y nvidia-container-toolkit && \
+    nvidia-ctk runtime configure --runtime=docker
 
 # Update and install Python, pip, and other necessary dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -32,6 +47,15 @@ WORKDIR /Seal
 COPY . /Seal
 
 COPY ${TENSOR_RT_INSTALLATION_FILE} ./nv-tensorrt.deb
+
+# Install TensorRT
+RUN dpkg -i nv-tensorrt.deb && \
+    cp /var/nv-tensorrt-local-repo-ubuntu2204-10.6.0-cuda-11.8/*-keyring.gpg /usr/share/keyrings/ && \
+    apt-get update && \
+    apt-get install -y tensorrt \
+    && apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 
 # Install Python dependencies
 RUN pip3 install --no-cache-dir -r requirements.txt

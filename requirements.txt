@@ -6,3 +6,5 @@ Pillow==8.4.0
 tensorrt==10.6.0
 packaging
 transformers==4.46.2
+onnx==1.17.0
+matplotlib==3.9.2
