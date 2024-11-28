@@ -58,7 +58,7 @@ RUN dpkg -i nv-tensorrt.deb && \
 
 
 # Install Python dependencies
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN pip3 install --no-cache-dir -r requirements-docker.txt
 
 # ================================ SSH Configuration ================================
 

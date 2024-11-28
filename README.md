@@ -3,10 +3,15 @@
 *Oryginalny paper* : https://arxiv.org/pdf/2312.14135
 *github* : https://github.com/penghao-wu/vstar
 
-## Docker file for NanoOWL
+## Installation
+To be able to use VQA, create environment with packages from <B>requirements.txt </B> file.
+To download the model just run start.py file.
+
+## Docker for NanoOWL
 Before you build a docker image, you have to include the TensorRT installation file in the root directory of the project. 
 You can specify the name of the file by setting the `TENSOR_RT_INSTALLATION_FILE` argument in the `docker build` command.
 nv-tensorrt.deb is the name of the file in command below.
+You can download the file here: https://developer.nvidia.com/tensorrt/download/10x
 
 <B> IMPORTANT: </B> The dockerfile currently assumes that the original name of TensorRT installation file is: <B>nv-tensorrt-local-repo-ubuntu2204-10.6.0-cuda-11.8</B>,
 if it is different, then modify the `RUN` command in the Dockerfile.
