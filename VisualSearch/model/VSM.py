@@ -7,7 +7,7 @@ import torch.nn.functional as F
 
 from VisualSearch.model.llava.model.language_model.llava_llama import (LlavaLlamaForCausalLM,
 													 LlavaLlamaModel)
-from nanoowl.owl_predictor import OwlPredictor
+from nanoowl.nanoowl.owl_predictor import OwlPredictor
 
 from .segment_anything.modeling import PromptEncoder, MaskDecoder, TwoWayTransformer
 
