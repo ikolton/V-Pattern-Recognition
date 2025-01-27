@@ -1,0 +1,12 @@
+1. Inference time for 'Please locate an owl and tell me something about her appearance': 492.196s
+2. Inference time for 'Based on the exact content of the flag on the roof, what can we know about its owner?': 855.925s 
+3. Inference time for 'Which company does that little doll belong to?': 797.858s
+4. Inference time for 'At which conference did someone get that black mug?': 976.226s
+5. Inference time for 'From the information on the black framed board, how long do we have to wait in line for this attraction?': 880.040s
+6. Inference time for 'What is the logo on that bag of bottles carried by the man?': 1096.057s
+7. Inference time for 'Where to buy a mug like this based on its logo?': 37.741s
+8. Inference time for 'What is the instrument held by an ape?': 1040.554s
+9. Inference time for 'What color is the liquid in the glass?': 2951.892s
+10. Inference time for 'Tell me the number of that player who is shooting.': 794.006s
+11. Inference time for 'What animal is drawn on that red signicade?': 901.603s
+12. Inference time for 'What kind of drink can we buy from that vending machine?': 1002.684s
